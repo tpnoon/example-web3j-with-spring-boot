@@ -12,9 +12,12 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.http.HttpService;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.concurrent.ExecutionException;
 
 @Api
 @RestController
@@ -22,8 +25,11 @@ public class AccountController {
 
     @PostMapping("/accounts/balance")
     @ApiOperation(value = "Get Ether Balance for a single Address")
-    public ResponseEntity<String> getAddress(String address) {
-        return ResponseEntity.ok(address);
+    public ResponseEntity<String> getEtherBalance(String address) throws ExecutionException, InterruptedException {
+        Web3j web3j = Web3j.build(new HttpService("https://mainnet.infura.io/v3/e4e6510f11544ac1aaa067eeff315655"));
+        EthGetBalance ethGetBalance = web3j.ethGetBalance(address, DefaultBlockParameterName.LATEST).sendAsync().get();
+        BigInteger nonce = ethGetBalance.getBalance();
+        return ResponseEntity.ok(String.valueOf(nonce));
     }
 
     @GetMapping("contracts/balance")
