@@ -34,7 +34,7 @@ public class AccountController {
 
     @GetMapping("contracts/balance")
     public ResponseEntity<String> getContractBalance(@RequestParam(value = "contractAddress") String contractAddress,
-                                                     @RequestParam(value = "contractAddress") String address) throws IOException {
+                                                     @RequestParam(value = "address") String address) throws IOException {
         Web3j web3 = Web3j.build(new HttpService("https://ropsten.infura.io/v3/0f6634c64c214d03a633188b40f09bcf"));
         Transaction txnEthCall = Transaction.createEthCallTransaction(address,
                 contractAddress,
